@@ -273,4 +273,4 @@ $ git push -u origin master
 
 ### I'm out
 
-I've had a blast delving into tennis statistics, I hope you have too!
+I've had a ball delving into tennis statistics, I hope you have too!
