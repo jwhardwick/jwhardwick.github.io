@@ -24,7 +24,7 @@ Despite their seemingly inhumane achievements, they are still bound by the laws 
 
 ![Avg. Age of Tourney Winner]({{ site.url }}/assets/age_graph.png)
 
-Unsurprisingly, we see a clear trend of age increasing. One would assume that this trend won't continue for much longer, although as there are no clear successors (except Nick Kyrgios), who knows what will happen. Considering that this years Australian and French Open were won by Federer (age 35), and Nadal (age 31) just took the French, they all seem to showing no signs of slowing down.
+Unsurprisingly, we see a clear trend of age increasing. One would assume that this trend won't continue for much longer, although as there are no clear successors (except Nick Kyrgios), who knows what will happen. Considering that this years Australian and French Open were won by Federer (age 35), and Nadal (age 31) respectively, they all seem to showing no signs of slowing down.
 
 ### Few rule the many
 
