@@ -1,0 +1,44 @@
+---
+layout: default
+---
+
+<div class="home">
+
+  {{ content }}
+
+  <h1 class="page-heading">about</h1>
+
+  <ul class="post-list">
+
+      <li>
+
+          <p>
+              I'm a Computer Science undergraduate living in Sydney, Australia.
+              <br />
+              I like to code in C, Python, Javascript, and SQL.
+              <br />
+              My CV is available <a href="/assets/cv.pdf">here</a>.
+
+
+          </p>
+      </li>
+
+  </ul>
+
+  <h1 class="page-heading">posts</h1>
+
+  <ul class="post-list">
+    {% for post in site.posts %}
+      <li>
+        {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
+        <span class="post-meta">{{ post.date | date: date_format }}</span>
+
+        <h2>
+          <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+        </h2>
+      </li>
+    {% endfor %}
+  </ul>
+
+
+</div>

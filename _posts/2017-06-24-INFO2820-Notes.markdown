@@ -1,0 +1,1248 @@
+---
+layout: post
+title:  "INFO2820: Databases"
+date:   2017-06-24 13:48:34 +1000
+categories: notes
+---
+
+
+
+
+
+* * *
+[**Relational-Model**](#relational-model)<br>
+1. [Keys](#keys)<br>
+
+* * *
+[**Conceptual Database Design**](#conceptual-database-design)<br>
+1. [ER-Diagrams](#er-diagrams)<br>
+1. [Constraints](#constraints)<br>
+1. [Weak-Entities](#weak-entities)<br>
+1. [ISA-Heirarchies](#isa-heirarchies)<br>
+
+* * *
+[**Relational-Algebra**](#relational-algebra)<br>
+
+* * *
+[**Database-Integrity**](#database-integrity)<br>
+1. [Triggers](#triggers)<br>
+
+* * *
+[**Schema-Normalisation**](#schema-normalisation)<br>
+1. [Functional-Dependancies](#functional-dependancies)<br>
+1. [Decomposition](#decomposition)<br>
+1. [Normal-Forms](#normal-forms)<br>
+1. [Types-of-Dependencies](#types-of-dependencies)<br>
+
+* * *
+[**DB-Applications**](#db-applications)<br>
+1. [Tiered-Architecture](#tiered-architecture)<br>
+1. [Application-Code-SQL](#application-code-sql)<br>
+1. [SQL-Injection](#sql-injection)<br>
+
+* * *
+[**Transaction-Management**](#transaction-management)<br>
+1. [Concurrent-Transactions](#concurrent-transactions)<br>
+1. [Conflict-Serialisability](#conflict-serialisability)<br>
+1. [Locking](#locking)<br>
+1. [Snapshot-Isolation](#snapshot-isolation)<br>
+1. [Isolation-Levels](#isolation-levels)<br>
+
+* * *
+[**Storage-Layer-and-Indexing**](#storage-layer-and-indexing)<br>
+1. [B+-Tree](#b+-tree)<br>
+1. [Hash-Index](#hash-index)<br>
+1. [Index-Creation](#index-creation)<br>
+1. [Index-Classification](#index-classification)<br>
+1. [Multicolumn-Search-Keys](#multicolumn-search-keys)<br>
+1. [Choosing-an-Index](#choosing-an-index)<br>
+
+* * *
+[**Data-Warehousing**](#data-warehousing)<br>
+1. [Warehouses](#warehouses)<br>
+
+* * *
+[**Advanced-Topics**](#advanced-topics)<br>
+
+* * *
+[**Datalog**](#datalog)<br>
+1. [Syntax](#syntax)<br>
+1. [Motivation](#motivation)<br>
+1. [Recursion](#recursion)<br>
+1. [Termination](#termination)<br>
+1. [Negation](#negation)<br>
+1. [Complexity](#complexity)<br>
+
+* * *
+[**Heirachical-Data**](#heirachical-data)<br>
+1. [Adjacency-List-Model](#adjacency-list-model)<br>
+1. [Path-Materialisation](#path-materialisation)<br>
+1. [Nested-Set-Model](#nested-set-model)<br>
+
+* * *
+[**Recursive-SQL**](#recursive-sql)<br>
+1. [Types](#types)<br>
+1. [Cycles](#cycles)<br>
+
+* * *
+[**Triggers**](#triggers)<br>
+1. [Trigger-Creation](#trigger-creation)<br>
+1. [Types](#types)<br>
+1. [Guidelines](#guidelines)<br>
+
+* * *
+[**Multi-Valued-Dependencies**](#multi-valued-dependencies)<br>
+1. [Definition](#definition)<br>
+1. [4NF](#4nf)<br>
+1. [Normalisation](#normalisation)<br>
+
+* * *
+[**Security**](#security)<br>
+1. [SQL-Injection](#sql-injection)<br>
+1. [Access-Control](#access-control)<br>
+1. [Passwords](#passwords)<br>
+1. [Encryption](#encryption)<br>
+
+* * *
+[**Serialisability**](#serialisability)<br>
+1. [Definition](#definition)<br>
+1. [Conflict-Serialisability](#conflict-serialisability)<br>
+1. [Snapshot-Isolation](#snapshot-isolation)<br>
+
+* * *
+[**Main-Memory-and-Indexing**](#main-memory-and-indexing)<br>
+1. [Main-Memory](#main-memory)<br>
+1. [Indexing](#indexing)<br>
+
+* * *
+[**No-SQL**](#no-sql)<br>
+1. [Definition](#definition)<br>
+1. [Criticisms](#criticisms)<br>
+1. [Key-Value-Stores](#key-value-stores)<br>
+1. [Document-Stores](#document-stores)<br>
+1. [Column-Stores](#column-stores)<br>
+
+* * *
+[**Distributed-Data-Management**](#distributed-data-management)<br>
+1. [Why?](#why?)<br>
+1. [Data-Partitioning](#data-partitioning)<br>
+1. [Data-Sharding](#data-sharding)<br>
+1. [Data-Replication](#data-replication)<br>
+1. [Distributed-Transactions](#distributed-transactions)<br>
+
+
+
+
+
+* * *
+# Relational-Model #
+
+**DML:** Data Manipulation Language - insert/delete/update records
+
+**DDL:** Data Definition Language - define tables and database objects
+
+**DCL:** Data Control Language - set user access priviledges
+
+
+> #### Keys ####
+
+**Super Key:** A set of attributes that identify a tuple. It's **closure** is the whole relation `(X)+ = R`
+
+**Candidate Key:** A minimal superkey - the fewest attributes required to identify a tuple.
+
+**Natural Key:** A key with external meaning
+
+**Artificial Key:** A key that has no external meaning - i.e SERIAL
+
+**Surrogate Key:** When an artificial key exists alongside a natural key, mainly for ease of use.
+Remember to still provide constraints for the natural key.
+
+* * *
+# Conceptual Database Design #
+
+> #### ER-Diagrams ####
+
+Double ellipsis for multi-valued attributes
+
+![Ellipses]({{ site.url }}/assets/info2820/double-ellipses.jpg)
+
+> #### Constraints ####
+
+**Key** constraint. Represented by an arrow from many to one. Each entity participates in at *at most* one
+instance of a relationship. A many to one relationship.
+
+![Ellipses]({{ site.url }}/assets/info2820/many.jpg)
+
+ i.e `An employee works in at most one department`
+
+**Participation** constraint. Total participation of E (entity) in R (relationship) is represented
+by a thick, bold line. If every entity participant is in at *least one* instance of a relationship.
+
+![Ellipses]({{ site.url }}/assets/info2820/bold.jpg)
+
+i.e `Every employee works in at least one department`
+
+**Participation and Key** constraint. Every entity participates in *exactly one* relationship. Use thick arrow.
+
+![Ellipses]({{ site.url }}/assets/info2820/thickarrow.jpg)
+
+i.e `Every employee works in exactly one department`
+
+**Cardinality** constraint. How often an entity participates in a relationship. Least amount of times (minimum cardinality),
+most amount (max cardinality)
+
+![Ellipses]({{ site.url }}/assets/info2820/cardinal.jpg)
+
+i.e `Every employee works in 1 to 3 departments`
+
+> #### Weak-Entities ####
+
+**Weak Entities**. An entity type that does not have a primary key. It must relate to some identifying entity in a one-to-many
+relationship, (identifying-to-weak).
+
+The **discriminator** of a weak entity is the set of attributes that allow each weak entity to be distinguised.
+
+The **weak-entity identififer** is the **discriminator** + the key of indentifying entity
+
+![Ellipses]({{ site.url }}/assets/info2820/weak.jpg)
+
+`The discriminator is represented by a dashed underscore, and double rectangles.`
+
+> #### ISA-Heirarchies ####
+
+Two entity types are in a ISA relationship (*F is a E*) if **absolute inheritance** - F inherits all attributes
+of E, and **set membership** - all entities of F are also of E.
+
+**Overlapping constraints**: the default allows an entity to belong to more than one lower level set. Specify that all
+lower entities are distinct with *disjoint* label.
+
+**Participation constraints**: default - an entity doesn't have to belong to a lower set. If an entity must belong,
+specify with a bold line from ISA triangle to superclass
+
+![Ellipses]({{ site.url }}/assets/info2820/isa.jpg) ![Ellipses]({{ site.url }}/assets/info2820/isa1.jpg)
+
+* * *
+# Relational-Algebra #
+
+The logic behind SQL statements. Statements are converted into this format before being optimised
+and executed.
+{% highlight markdown %}
+>Filtering operations
+Selection       σ       select a subset of rows     WHERE
+Projection      π       delete unwanted columns     SELECT
+
+>Combining operations
+Cross-product   ×       combine every tuple         CROSS JOIN
+Join            ⋈       combine matching tuples     JOIN
+Theta join      θ       join if some condition      JOIN ... WHERE ...
+
+>Set operations
+Union           ∪       in 1 or 2                   UNION
+Intersection    ∩       in 1 and 2                  INTERSECT
+Difference      -       in 1, not 2                 EXCEPT
+
+>Other
+Aggregate       γ       collections of rows         COUNT, MAX, etc.
+Rename          ρ
+{% endhighlight %}
+
+i.e
+
+
+{% highlight sql %}
+SELECT name FROM Student WHERE country='AUS';
+{% endhighlight %}
+`π name ( σ country=‘AUS’ (Student) )`
+{% highlight sql %}
+SELECT COUNT(*) FROM Transcript WHERE grade='CR';
+{% endhighlight %}
+`γ COUNT(*)( σ grade=‘CR’ (Transcript))`
+
+
+* * *
+# Database-Integrity #
+
+**Referential Integrity**: is making sure data matches even after updates or deletes.
+{% highlight sql %}
+ON DELETE/UPDATE NO ACTION OR CASCADE OR SET NULL;
+{% endhighlight %}
+
+**Domain Constraints**: NOT NULL, DEFAULT, UNIQUE etc.
+{% highlight sql %}
+-- Check
+age INTEGER CHECK(age >= 0);
+
+-- Create custom domains
+CREATE DOMAIN Grade CHAR DEFAULT 'P' CHECK(value IN ('F', 'P', 'D'));
+{% endhighlight %}
+
+**Assertions**: a non functional way to represent integrity checks
+
+{% highlight sql %}
+CREATE ASSERTION mark_constraint CHECK (
+    NOT EXISTS (
+            SELECT sid
+            FROM assessments
+            GROUP BY sid, uos_code
+            HAVING sum(mark) > 100)
+);
+{% endhighlight %}
+
+**Access control**: User classes and roles can be created that define what access certain users have.
+
+{% highlight sql %}
+-- REVOKE to remove
+GRANT SELECT -- INSERT/DELETE etc.
+ON table
+TO user;
+
+-- Roles
+CREATE ROLE manager
+GRANT INSERT, SELECT ON table TO manager
+GRANT manager TO user;
+{% endhighlight %}
+
+> #### Triggers ####
+
+Triggers allow you to predefine events to occur when certain situations arise.
+
+{% highlight sql %}
+-- Create a log
+CREATE TRIGGER logger
+AFTER INSERT OR UPDATE OR DELETE ON table
+BEGIN
+    INSERT INTO EditLog (user, when)
+    VALUES (CURRENT_USER, CURRENT_DATE)
+END;
+{% endhighlight %}
+
+
+* * *
+# Schema-Normalisation #
+
+> #### Functional-Dependancies ####
+
+The value of X determines the value of Y.
+
+`X → Y`
+
+The LHS, X, is the *antecedent*. The RHS, Y, is the *consequent*.
+
+If X → Y, the reverse is not necessarily true.
+
+The concept of **redundancy**: whenever X is repeated, Y must also be repeated. This can lead to problems when deleting
+or updating tuples, so it is usually ideal to split tables into smaller tables, and join them when needed.
+
+> #### Decomposition ####
+
+Decomposing schemas into smaller schemas reduces redundancies. The main aims when deccomposing are:
+
+1. Minimise redundancy - **normalisation**
+2. Preserve information - **lossless join**
+3. Preserve functional dependencies - **dependency preserving**
+
+> #### Normal-Forms ####
+
+![Ellipses]({{ site.url }}/assets/info2820/forms.jpg)
+
+**First Normal Form 1NF**:
+
+**Second Normal Form 2NF**:
+
+**Third Normal Form 3NF**:
+
+**Boyce-Codd Normal Form BCNF**:
+
+> #### Types-of-Dependencies ####
+
+**Partial**: Antecedent is part of a key
+
+![Ellipses]({{ site.url }}/assets/info2820/partial.jpg)
+
+**Full**: Antecedent is a key
+
+**Transitive**: Antecedent is *functionally dependant* on a key
+
+![Ellipses]({{ site.url }}/assets/info2820/full.jpg)
+
+**Reflective**: Consequent includes part of a key
+
+![Ellipses]({{ site.url }}/assets/info2820/reflect.jpg)
+
+{% highlight bash %}
+
+A B C D E
+Key: ABC
+
+# Partial
+AB → D
+
+# Full
+ABC → D
+
+# Transitive
+ABC → D
+D → E # transitive
+
+# Reflective
+Key: AB, BC
+C → A
+
+
+{% endhighlight %}
+
+**Closure**: expand all the dependencies. If this is identical to the entire tuple, then it is a superkey
+
+{% highlight bash %}
+
+R = A B C D E F G
+Key: ABC
+
+Rules:
+AB → D  # Partial
+D → E   # Transitive
+C → F   # Partial
+
+Minimal superkey (candidate key):
+(ABCG)+ = R
+
+{% endhighlight %}
+
+* * *
+# DB Applications #
+
+**Interactive** SQL:
++ SQL statements directly input from terminal
++ Amount of data returned not known in advance
+
+**Non-interactive** SQL:
++ SQL included in a host language like C, Python
+
+**Server-side application development**:
++ Triggers
++ Stored procedures
+
+> #### Tiered-Architecture ####
+
+**Presentation Services**: Displays data and handles flow of information (frontend)
+
+**Application Services**: Implements user requests and interacts with DB (backend)
+
+**1-Tier**: Centralised System
++ Application with an integrated DB
++ i.e smartphone app with local SQLite DB
+
+**2-Tier**: Client-Server Model
++ Multiple clients interacting with a remote DB
++ Presentation and application services on local machine
++ i.e a restaurant system which tracks bookings, orders, payments, and has terminals that connect via SQL to a central database
+
+**3-Tier**:
++ Multiple clients interacting with a web server that then interacts with a DB
++ Presentation services on local machine
++ Application services on web server
++ i.e a social media smartphone app
+
+> #### Application-Code-SQL ####
+
+**Statement level interface (SLI)**: SQL statements are embedded in the host language
+
+**Call level interface (CLI)**: SQL commands are created with special APIs
++ The concept of a *cursor*, which points to a single in a results table
+
+> #### SQL-Injection ####
+
+When statements aren't sanitized, a user could input malicious SQL by abusing apostrophes.
+
+**Prepared statements**: Java or Python have functions that make sure apostrophes can't be escaped etc.
+
+**Stored Procedures**: pre written functions stored on the database server
++ Reduces network traffic
++ Increased abstraction
++ Easier to maintain
++ Good for logging transactions
++ Security
+
+* * *
+# Transaction Management #
+
+When there are multiple requests being made to a DB at once it's essential that they don't interfere with each other.
+
+There are four features of transactions that are key, **ACID**:
+
+**Atomic**: A transaction either finishes completely, or reverts back to original state. All or nothing
+
+**Consistent**: If new data is inserted, then any tables that aggregate over the new data need to be updated as well
+
+**Isolated**: If transactions are executed concurrently, they should result in a final state identical to if they
+were executed sequentially
+
+**Durability**: Once a transaction has been commited, it will remain that way, regardless of crash/error
+
+The code for transactions:
+
+{% highlight sql %}
+
+BEGIN TRANSACTION;
+-- if something goes wrong:
+ROLLBACK;
+-- else
+COMMIT;
+
+{% endhighlight %}
+
+> #### Concurrent-Transactions ####
+
+The **interleaved execution schedule** is the order in which they take place. Some problems:
+
+**Reading uncommitted data** (WR conflicts, dirty reads):
++ Where A writes data, B reads it, and then A aborts.
+
+**Unrepeatable reads** (RW conflicts):
++ A reads, B writes, then A reads again and gets a different result
+
+**Overwriting uncommited data** (WW conflicts, lost updates):
++ A writes, then B writes to the same place, losing what A wrote
+
+> #### Conflict-Serialisability ####
+
+A schedule is *conflict serialisable* if
++ equivalent to a serial schedule of A and B in either order
+
+> #### Locking ####
+
+**Two-phase Locking 2PL Protocol**:
++ Locks for every data item
++ S(shared) lock for reading
++ X(exclusive) lock for writing
+
+> #### Snapshot-Isolation ####
+
+Newer databases like Postgres allow for this system, which is a **multiversion database**
++ The old value of an item is not overwritten when update, instead a new version is created
++ Doesn't require read locks, transaction reads from latest snapshot instead
++ A transaction that has updated X can commit if no other transaction has commited an update to X since start of transaction
++ First committer wins
+
+> #### Isolation-Levels ####
+
+According to ANSI Standard Isolation Levels. The programmer is responsible for choosing the appropriate level
+
+**Serialisable**:
++ As per SQL-standard, however most systems use a weaker level
+
+**Repeatable Read**:
++ Only read committed records, repeated reads must return same value
+
+**Read Committed**:
++ Only read committed records, successive reads may return different values
++ Most common level
+
+**Read Uncommitted**:
++ Read records before they're committed\
+
+* * *
+# Storage Layer and Indexing #
+
+Data is stored in sets of pages, and it is prohibitively slow to do a linear scan every time we need to access
+records.
+**Pros**:
++ Speed up query times
+
+**Cons**:
++ Require extra storage space
++ Index must be updated when table is modified
+
+> #### B+-Tree ####
+
+A form of binary tree where nodes are sorted based on the index chosen.
++ Good for range searches
+
+> #### Hash-Index ####
+
+A hash table good for equality searches, but bad for range.
+
+
+> #### Index-Creation ####
+
+{% highlight sql %}
+CREATE INDEX ON Employe(birthdate);
+{% endhighlight %}
+
+> #### Index-Classification ####
+
+**Primary Index**: An index whose search key specifies the sequential order of the file
+
+**Secondary Index**: An index on something that isn't sorted
+
+**Unique Index**: An index over a candidate key
+
+**Clustered Index**: If data records and index are ordered in the same åway. There can be at most one clustering index
+on a table. When a table is created, the primary key will have a clustered index on it as default.
++ Good for range search
++ Fewer page transfers
++ Increases likelihood of cache hit
+
+**Dense Index**: Consider `n` rows of data. A dense index will have `n` index entries. Secondary indexes are always
+dense indexes as they are unsorted. Looking up index `k` will not be nearby `k + 1`
+
+**Sparse Index**: From the above example, a sparse index could have fewer than `n` index entries. This is because a sparse
+index can only be used on a primary index, and is thus sorted. So you could look at index `k` and know that `k + 1` and
+`k + 2` would follow.
+
+
+> #### Multicolumn-Search-Keys ####
+
+{% highlight sql %}
+CREATE INDEX ON Table(att1, att2);
+{% endhighlight %}
+
+The order in which the attributes are specified is important.
+
+Searches that **are** supported:
++ (att1, att2)
++ (att1a - att1b, att2a - att2b)
++ (att1a - att1b)
+
+That **aren't**:
++ (att2a - att2b)
+
+**Covering Index**: The index covers the whole query, so no data record is accessed.
+{% highlight sql %}
+SELECT att2 FROM Table WHERE att1 = ...;
+{% endhighlight %}
+
+> #### Choosing-an-Index ####
+
++ Equality (hash) or range (B+ tree)?
++ Is there already a index (i.e is it a primary key)?
++ Do you want a covering index?
+
+Some examples:
+{% highlight sql %}
+-- Query we want to index
+SELECT E.Id
+FROM Employee E
+WHERE E.Salary < :upper AND E.Salary > :lower;
+
+-- It's a range search
+-- There's already an index on Id (pkey), but it's useless in this situation
+CREATE INDEX ON Employee(salary); -- B+ Tree
+
+-- Coverying index?
+CREATE INDEX ON Employee(salary, id);
+{% endhighlight %}
+
+Some examples:
+{% highlight sql %}
+-- Query we want to index
+SELECT T.StudId
+FROM Transcript T
+WHERE T.Grade = :grade;
+
+-- It's an equality search
+-- Already an index on StudId (pkey), but it's useless in this situation
+CREATE INDEX ON Transcript(grade); -- Hash
+
+-- Coverying index?
+CREATE INDEX ON Transcript(grade, StudId);
+{% endhighlight %}
+
+What the primary key is makes a big difference when choosing an index.
+
+{% highlight sql %}
+
+SELECT T.uosCode, T.grade
+FROM Transcript T
+WHERE T.studId = :id AND T.semester = ‘Sem1’
+
+-- Equality search
+-- If pkey = studId, we can use it
+-- If pkey = (uosCode, studId), then it's useless
+-- In this situation we create a new key on studId
+-- Or (studId, semester) to cover
+
+{% endhighlight %}
+
+{% highlight sql %}
+
+SELECT T.uosCode, COUNT(*)
+FROM Transcript T
+WHERE T.year = 2009 AND T.semester = ‘Sem1’
+GROUP BY T.uosCode
+
+-- Equality search of year, semester, with GROUP BY on uosCode
+-- If pkey = (studId, year, semester, uosCode), it's useless as
+-- the attributes we want have to be at the front of the index
+-- Covering index
+CREATE INDEX ON Transcript(year, semester, uosCode);
+
+{% endhighlight %}
+
+* * *
+# Data-Warehousing #
+
+**On-Line Transaction Processing OLTP**:
++ Short and simple queries
++ Frequent updates
++ Only requires a small subset of the database
++ Wants data that is up to date
+
+**On-Line Analytic Processing OLAP**:
++ Complex queries
++ Infrequent updates
++ Accesses a large fraction of database
++ Not essential that the data is up to date
+
+> #### Warehouses ####
+
+Issuses with data warehousing:
++ Semantic integration: data is often from different sources/schemas and may have different formatting
++ Data must be periodically refreshed/purged
++ Metadata must be kept for all data (source, load time)
+
+* * *
+# Advanced-Topics #
+
+* * *
+# Datalog #
+
+Datalog is a logic based query language
+
+> #### Syntax ####
+
+
+
+**Predicate**:
++ A boolean function taking a fixed number of args
++ A predicate followed by its arguments is called an atom
+{% highlight datalog %}
+frequents(Drinker, Bar)
+likes(Drinker, Beer)
+sells(Bar, Beer, Price)
+{% endhighlight %}
++ To insert data:
+{% highlight datalog %}
+frequents(jon, the_rose)
+likes(jon, vb)
+sells(the_rose, vb, 4.50)
+{% endhighlight %}
++ To query:
+{% highlight datalog %}
+?- sells(Bar, Beer, Price)
+{% endhighlight %}
+
+**Rule**:
++ Rules define views
++ **Head** is the consequent, a single subgoal
++ **Body** is the atecedent, a collection of subgoals that are atoms
+{% highlight datalog %}
+head :- body
+{% endhighlight %}
++ a view that lists names of people from likes
+{% highlight datalog %}
+person(P) :- likes(P, _)
+{% endhighlight %}
++ a view containing all bars selling Löwenbrau beer for < $4
+{% highlight datalog %}
+cheapBars(B, P) :- sells(B, löwenbrau, P), P < 4
+{% endhighlight %}
++ These rules can be queried
+{% highlight datalog %}
+?- cheapBars(B, P), P < 3.5
+?- cheapBars(ueberbar, P)
+{% endhighlight %}
++ A variable appearing in the head of the rule is called **distinguished**
++ An example of **negation**:
+{% highlight datalog %}
+indirect(X, Y) :- edge(X, Z), edge(Z, Y), NOT edge(X, Y)
+{% endhighlight %}
+X and Y are indirect IF edge between (X, Y) AND between (Z, Y) NOT between (X, Y)
+We consider a rule **safe** if each:
++ distinguished variable
++ variable in an arithmetic subgoal
++ variable in a anegated subgoal
+
+also appear in a nonnegated, relational subgoal
++ **Unsafe rules**:
+{% highlight datalog %}
+s(X) :- r(Y)
+s(X) :- r(Y) AND NOT r(X)
+{% endhighlight %}
+
+Datalog programs define predicates by either:
++ **Extensional Database EDB**: defined by facts
+{% highlight datalog %}
+-- the parent of mary is bill
+parent(bill, mary)
+parent(mary, john)
+{% endhighlight %}
++ **Intensional Database IDB**: defined by rules
+{% highlight datalog %}
+ancestor(X, Y) :- parent(X, Y)
+ancestor(X, Y) :- parent(X, Z), ancestor(Z, Y)
+{% endhighlight %}
+
+> #### Motivation ####
+
++ Datalog is good for querying graphs or networks
++ Much easier to use recursion
++ Used heavily in research
++ Datalog can be run against relational databases
+
+> #### Recursion ####
+
+With **IDB**, if a rule has the predicate appearing in both the head and body, it's recursive.
+
+Alternatively, a **dependancy graph** with a cycle in it implies recursion.
+
+
+
+> #### Termination ####
+
+Datalog queries *without* negation use the **Naïeve Evaluation Algorithm**
+1. Initialise *CurrentState*
++ All base relations set to instances from database
++ All derived relations = {}
++ *NewState* = *CurrentState*
+2. For each derived relation **R**
++ answer = {}
++ For each rule **r** that has **R** in the body
++ + Evaluate the query that corresponds to **r**
++ + answer = answer UNION result(**r**)
++ *NewState* = *NewState* UNION answer
+3. If *CurrentState* == *NewState* then stop
+4. Else, *CurrentState* = *NewState*, repeat 2
+
+This algorithm always terminates as:
++ The initial DB state contains a finite number of constants
++ Only a finite number of tuples can be generated from finite constants
++ Therefore the growth of *CurrentState* will eventually stop
+
+
+
+> #### Negation ####
+
+If we introduce negation into our rules, then termination is no longer guaranteed.
+
+> #### Complexity ####
+
+The complexity of the Naive Evaluation Algorithm can be estimated as D^N x D^N (worst case)
+
+> #### Examples ####
+
+![Ellipses]({{ site.url }}/assets/info2820/dlog.jpg)
+
+Turn the graph into datalog facts. Then compute the weight of path between nodes.
+
+{% highlight datalog %}
+% Rules
+path(a,b,2).
+path(a,c,3).
+path(b,d,3).
+path(c,d,1).
+path(c,e,3).
+path(d,f,1).
+path(e,f,1).
+
+% Path between nodes
+route(X,Y,W) :- path(X,Y,Wxy), W = Wxy.
+route(X,Y,W) :- route(X, Z, Wx), route(Z, Y, Wz), W is Wx + Wz.
+
+% To query
+result(W) :- route(a,f,W).
+
+DES> result(W) :- route(a,f,W).
+Info: Processing:
+  result(W) :-
+    route(a,f,W).
+{
+  result(5),
+  result(6),
+  result(7)
+}
+
+{% endhighlight %}
+
+
+* * *
+# Heirachical-Data #
+
+> #### Adjacency-List-Model ####
+
+This is just a way to represent nodes and edges in an SQL table
+
+![Adjacency]({{ site.url }}/assets/info2820/adjace.jpg)
+
+**Disadvantages:**
++ It's okay for queries on parent-child relationships, and leaf level updates
++ Insert/delete/update nodes is very complex
++ Bad for operations involving more than one edge
+
+> #### Path-Materialisation ####
+
+This system solves the single edge issue by storing the path of every node/leaf. Queries look like:
+{% highlight sql %}
+SELECT * WHERE path LIKE 'Root%';
+{% endhighlight %}
+
+![Adjacency]({{ site.url }}/assets/info2820/path.jpg)
+
+**Disadvantages:**
++ Good for searching down a tree, bad for searching up
++ Insertion and Deletion is still complex
+
+> #### Nested-Set-Model ####
+
+Numbers are used to repesent the left and right edges of each node, allowing a tree to be 'recreated'
+
+![Adjacency]({{ site.url }}/assets/info2820/nested.jpg)
+
+**Disadvantages:**
++ Very hard to see what's happening
++ Requires setting up checks to ensure integrity of tree
++ Inserts and Deletes are costly
+
+At the end of the day it's really difficult to represent tree structures in SQL.
+
+* * *
+# Recursive-SQL #
+
+> #### Types ####
+
+{% highlight sql %}
+
+WITH RECURSIVE trips
+    AS (SELECT j0.journey_id::text AS journey_id, from_place, to_place,
+        depart_time AS departure, arrive_time AS arrival, 1 AS connections
+        FROM journey_view j0 WHERE from_place = %s
+        UNION ALL
+        SELECT t.journey_id || ' --> ' || j1.journey_id::text AS journey_id,
+        t.from_place, j1.to_place, t.departure AS departure,
+        j1.arrive_time AS arrival, t.connections + 1 AS connections
+        FROM trips t
+        JOIN journey_view j1 ON j1.from_place = t.to_place
+        )
+        SELECT * FROM trips WHERE to_place = %s
+        ORDER BY connections ASC;
+
+{% endhighlight %}
+
+> #### Cycles ####
+
+
+* * *
+# Triggers #
+
+**Static Integrity Constraints**:
++ Fulfilled by every legal database state
++ Things like CONSTRAINT, CHECK, types
+
+**Dynamic Integrity Constraints**:
++ Specify conditions on state change
++ Triggers
+
+> #### Trigger-Creation ####
+{% highlight sql %}
+CREATE FUNCTION Check_nBooked() RETURNS trigger AS
+    $booking_stamp$
+    BEGIN
+    UPDATE journey
+    SET    nbooked =    (SELECT COUNT(*)
+                        FROM    booking
+                        WHERE   vehicle_code=NEW.vehicle_code
+                        AND     start_date=NEW.start_date
+                        AND     start_time=NEW.start_time)
+    WHERE   start_date=NEW.start_date
+    AND     start_time=NEW.start_time
+    AND     vehicle_code=NEW.vehicle_code;
+    RETURN NEW;
+    END;
+    $booking_stamp$ LANGUAGE plpgsql;
+-- Trigger to call above function
+CREATE TRIGGER Call_Check_nBooked
+    AFTER INSERT OR UPDATE ON booking
+    FOR EACH ROW
+    EXECUTE PROCEDURE Check_nBooked();
+END;
+{% endhighlight %}
+
+> #### Stored-Procedures ####
+{% highlight sql %}
+CREATE FUNCTION add_booking(for_member CHAR(10),
+                my_member_id CHAR(10), journeyID INT)
+    RETURNS void AS $$
+    BEGIN
+      INSERT INTO booking VALUES (for_member, my_member_id,
+                                now()::timestamp, journeyID);
+      UPDATE journey SET nbooked = nbooked + 1
+      WHERE journey_id = journeyID;
+    END;
+    $$ LANGUAGE plpgsql;
+
+{% endhighlight %}
+
+
+* * *
+# Multi-Valued-Dependencies #
+
+> #### Definition ####
+
+`X` and `Y` are subsets of attributes of a relation `R`. A **multivalued dependancy**
+holds for `X →→ Y` if for every legal instance of `R`, each `X` value is assosciated
+with a set of `Y` values that is independent of the values of other attributes
+
+
+{% highlight bash %}
+X →→ Y
+
+    X   Y   Z
+t   1   1   -
+v   1   2   1
+u   1   -   1
+{% endhighlight %}
+
+The issue with **MVD's** is that they introduce a level of redundancy, as every attribute `Z`
+has to be repeated for each combo of `X` and `Y`
+
+
+> #### 4NF ####
+
+**Forth Normal Form** is an extension of **BCNF**. To be in 4NF, for every non-trivial **MVD** `X →→ Y`,
+`X` is a superkey.
+
+{% highlight bash %}
+-- Not in 4NF ()
+X →→ Y
+X →→ Z
+
+    X   Y   Z
+r   1   1   1
+s   1   1   2
+t   1   2   1
+v   1   2   2
+u   2   1   1
+w   2   1   2
+
+{% endhighlight %}
+
+> #### Normalisation ####
+
+To get this into 4NF we have to **normalise**.
+
+{% highlight bash %}
+-- 4NF
+X →→ Y
+    X   Y
+r   1   1
+s   1   2
+t   2   1
+
+
+X →→ Z
+    X   Z
+r   1   1
+s   1   2
+t   2   1
+u   2   2
+
+{% endhighlight %}
+
+**About Normalisation**:
++ Reduces redundancy
++ Makes updates easier
++ Can be costly as it involves more joins
++ A table can be **de-normalised** to improve performance
+
+* * *
+# Security #
+
+> #### Top-security-flaws: ####
+
++ SQL injection
++ Showing database errors
++ Lack of encryption
++ Authorisation failures
+
+
+> #### Prevention ####
+
++ Never store plan text password
++ Restrict access privledges
++ Use stored procedures
++ Hide error messages
++ **Data Minimalism**:
++ + only store what you need
++ + encrypt sensitive information
++ + allow users to delete their info
+
+
+
+* * *
+# Serialisability #
+
+> #### Definition ####
+
+A schedule is serialisable if it is equivalent to a serial schedule
+
+> #### Conflict-Serialisability ####
+
+Two schedules are conflict serialisable if every pair of conflicting actions is ordered in the same way
+
+{% highlight bash %}
+
+Schedule:
+R1z R2q W2z R1q W1y
+
+Conflict pairs:
+R1z W2z
+
+Equivalent serial schedule of T1 T2:
+R1z R1q W1y R2q W2z
+
+Not equivalent to T2 T1 though
+
+{% endhighlight %}
+
+A **serialisability graph** is a directed graph that represents these schedules. Every transaction T has it's own node,
+and if T1 comes before T2 in one of their conflict pairs, then an edge is drawn from T1 to T2. If there are any cycles,
+then the schedule is not conflict serialisable.
+
+{% highlight bash %}
+
+Schedule:
+R1a R2b W2a W1a W3a
+
+Conflict pairs:
+pair        edge
+R1a W2a     1 → 2
+W2a W1a     2 → 1
+R1a W3a     1 → 3
+W2a W3a     2 → 3
+W1a W3a     1 → 3
+
+Not conflict serialisable, cycle exists (see graph)
+
+{% endhighlight %}
+
+![Adjacency]({{ site.url }}/assets/info2820/conflict.jpg)
+
+
+> #### Snapshot-Isolation ####
+
+Transactions read a consistent snapshot of data, that isn't current, but is what was most recently committed at
+the start of the transaction
+
+
+* * *
+# Main-Memory-and-Indexing #
+
+> #### Main-Memory ####
+
+> #### Indexing ####
+
+
+
+* * *
+# No-SQL #
+
+> #### Definition ####
+
+A non-relational way of storing data
+
+> #### Criticisms-of-SQL ####
++ Slow with quite a bit of overhead
++ Complicated
++ Schema has to be known in advance
++ Can't scale to massive amounts of data
+
+> #### Key-Value-Stores ####
+
+i.e Amazon's Dynamo
++ Highly scalable
++ Basically a huge distributed hash table
++ Can't have secondary indexes
+
+> #### Document-Stores ####
+
+i.e MongoDB
++ Collections of nested sets of key-value pairs
++ API for a wide range of languages
++ Scalable
++ Supports secondary indexes
+
+> #### Column-Stores ####
+
+i.e HBase
++ A column oritented database
+
+* * *
+# Distributed-Data-Management #
+
+> #### Why? ####
+
+> #### Data-Partitioning ####
+
+Splitting up where data is stored
+
+> #### Data-Sharding ####
+
+> #### Data-Replication ####
+
+> #### Distributed-Transactions ####
+
+# Cheat Sheet #
+
+> ### Integrity Constaints ###
+Static Integrity:
+Dynamic Integrity:
+Referential Integrity:
+
+A: all or nothing
+C: one valid state to another
+I: changes from one transaction not visible to other
+D: on crash, revert to last consistent state
+
+
+> ### SQL ###
+
+
+> ### Datalog ###
+
+path(X,Y,d).
+route(X,Y,N) :- path(X,Y,N).
+route(X,Z,N) :- path(X,Y,Nx), path(Y,Z,Ny), N=Nx+Ny.
+result(N) :- route(a,f,N), min(route(a,f,CN),CN,Min), N=Min.
+
+Naïve Evaluation Algorithm:
+
+
+
+
+
+
+> ### OLAP ###
+
+Online Transaction Processing: simple queries, frequent updates
+Online Analytic Processing: complex, infrequent, large % DB
+Semantic Transformation: weekly salary to yearly
+Syntactic Transformation: differently named fields
+
+**CUBE:**
+
+SELECT x, y, AVG(z)
+FROM table
+GROUP BY CUBE(x, y);
+
+**WINDOW:**
+For each row, find all other rows related in some way
+
+SELECT x, y,
+RANK() OVER (
+PARTITION BY x
+ORDER BY y
+)
+FROM table;
+
+
+> ### SQL ###
